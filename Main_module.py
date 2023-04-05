@@ -96,7 +96,22 @@ def line_plot(data, label1, label2) :
     plt.show() 
     plt.close()
     
-    
+def pop_growth_mean() :   
+  """
+  
+  Function to calculate the mean of population growth for 5 countries
+  """
+  dataf1,dataf2 = get_data("CSV_files/population_growth.csv")
+  data = dataf1.set_index('Country Name')
+  transpose = data.transpose()
+  #Droping unneccessary columns
+  transpose = transpose.drop(index = 'Indicator Code')
+  transpose = transpose.drop(index = 'Indicator Name')  
+  transpose = transpose.drop(index = 'Country Code')
+  clean_data = transpose.fillna(0)
+  mean = clean_data[["Brazil", "China", "Canada", "Denmark", "Finland", "Italy"]].describe()
+  return mean
+
 #Reading bar-data from csv file to data frames using the function get_data 
 df_pop, pop_data1 = get_data("CSV_files/population_growth.csv")
 df_pop = filter_bar_graph(df_pop)
@@ -121,3 +136,12 @@ barplot(df_Arable, "Growth of Land", " THE GROWTH OF ARABLE LAND ")
 line_plot(CO2_data, "CO2 Emission", "CO2 Emission")
 line_plot(Cereal_data, "Cereal yield", "Cereal Yield")
 
+#Statistical function for returning mean for population growth data
+pop_mean = pop_growth_mean()
+print(pop_mean) 
+print(pop_mean.mean())
+ 
+
+##Writing data to csv file
+pop_mean = pop_mean.to_csv("mean_of_population_growth.csv")
+    
